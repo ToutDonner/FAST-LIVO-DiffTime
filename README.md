@@ -1,3 +1,7 @@
+# Modified
+
+获取相机曝光时间和传输时间，补偿给图像。
+
 # FAST-LIVO
 
 ## Fast and Tightly-coupled Sparse-Direct LiDAR-Inertial-Visual Odometry
@@ -43,7 +47,7 @@ Ubuntu 16.04~20.04.  [ROS Installation](http://wiki.ros.org/ROS/Installation).
 
 ### 2.2 PCL && Eigen && OpenCV
 
-PCL>=1.6, Follow [PCL Installation](https://pointclouds.org/). 
+PCL>=1.6, Follow [PCL Installation](https://pointclouds.org/).
 
 Eigen>=3.3.4, Follow [Eigen Installation](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
@@ -102,8 +106,8 @@ Edit `config/xxx.yaml` to set the below parameters:
 - `lidar_enable`: Enbale lio submodule.
 - `point_filter_num`: The sampling interval for a new scan. It is recommended that `3~4` for faster odometry, `1~2` for denser map.
 - `outlier_threshold`: The outlier threshold value of photometric error (square) of a single pixel. It is recommended that `50~250` for the darker scenes, `500~1000` for the brighter scenes. The smaller the value is, the faster the vio submodule is, but the weaker the anti-degradation ability is.
-- `img_point_cov`: The covariance of photometric errors per pixel. 
-- `laser_point_cov`: The covariance of point-to-plane redisual per point. 
+- `img_point_cov`: The covariance of photometric errors per pixel.
+- `laser_point_cov`: The covariance of point-to-plane redisual per point.
 - `filter_size_surf`: Downsample the points in a new scan. It is recommended that `0.05~0.15` for indoor scenes, `0.3~0.5` for outdoor scenes.
 - `filter_size_map`: Downsample the points in LiDAR global map. It is recommended that `0.15~0.3` for indoor scenes, `0.4~0.5` for outdoor scenes.
 
