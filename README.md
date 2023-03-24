@@ -2,6 +2,16 @@
 
 获取相机曝光时间和传输时间，补偿给图像。
 
+可以选择视觉部分只更新Bias
+
+感谢[jj](https://github.com/GDUT-Kyle)
+
+![1679635705400](image/README/1679635705400.png)
+
+# TODO：
+
+测试更多数据，验证。
+
 # FAST-LIVO
 
 ## Fast and Tightly-coupled Sparse-Direct LiDAR-Inertial-Visual Odometry
