@@ -1501,7 +1501,6 @@ int main(int argc, char **argv)
             }
             continue;
         }
-        ROS_WARN("11111111111111111");
 /*** Segment the map in lidar FOV ***/
 #ifndef USE_ikdforest
         lasermap_fov_segment();
@@ -1509,6 +1508,7 @@ int main(int argc, char **argv)
         /*** downsample the feature points in a scan ***/
         downSizeFilterSurf.setInputCloud(feats_undistort);
         downSizeFilterSurf.filter(*feats_down_body);
+
 #ifdef USE_ikdtree
 /*** initialize the map kdtree ***/
 #ifdef USE_ikdforest
@@ -1545,6 +1545,7 @@ int main(int argc, char **argv)
         downSizeFilterMap.filter(*featsFromMap);
         int featsFromMapNum = featsFromMap->points.size();
 #endif
+        // ROS_WARN("222222");
         feats_down_size = feats_down_body->points.size();
         cout << "[ LIO ]: Raw feature num: " << feats_undistort->points.size() << " downsamp num " << feats_down_size << " Map num: " << featsFromMapNum << "." << endl;
 
