@@ -6,11 +6,10 @@ Panels:
       Expanded:
         - /Global Options1
         - /mapping1
-        - /mapping1/surround1
-        - /mapping1/currPoints1
         - /mapping1/currPoints1/Autocompute Value Bounds1
         - /Odometry1/Odometry1/Shape1
         - /Odometry1/Odometry2/Shape1
+        - /Image1
       Splitter Ratio: 0.520588219165802
     Tree Height: 259
   - Class: rviz/Selection
@@ -31,7 +30,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: surround
+    SyncSource: Image
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -138,7 +137,7 @@ Visualization Manager:
       Color: 30; 33; 255
       Color Transformer: FlatColor
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -153,7 +152,7 @@ Visualization Manager:
       Unreliable: true
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Class: rviz/Group
       Displays:
         - Angle Tolerance: 0.009999999776482582
@@ -289,25 +288,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 49.738094329833984
+      Distance: 95.6040267944336
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -17.86642837524414
-        Y: -38.84080505371094
-        Z: -7.094048023223877
+        X: 46.56033706665039
+        Y: -4.362032890319824
+        Z: 1.4625378847122192
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.599797248840332
+      Pitch: 0.2697974145412445
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.2212910652160645
+      Yaw: 2.9681098461151123
     Saved: ~
 Window Geometry:
   Displays:

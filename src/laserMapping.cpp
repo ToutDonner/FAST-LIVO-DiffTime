@@ -953,6 +953,7 @@ void publish_odometry(const ros::Publisher &pubOdomAftMapped)
 {
     odomAftMapped.header.frame_id = "camera_init";
     odomAftMapped.child_frame_id = "aft_mapped";
+    // odomAftMapped.header.stamp = ros::Time().fromSec(last_timestamp_lidar); //.ros::Time()fromSec(last_timestamp_lidar);
     odomAftMapped.header.stamp = ros::Time::now(); //.ros::Time()fromSec(last_timestamp_lidar);
     set_posestamp(odomAftMapped.pose.pose);
     // odomAftMapped.twist.twist.linear.x = state_point.vel(0);
@@ -992,6 +993,30 @@ void publish_path(const ros::Publisher pubPath)
     msg_body_pose.header.frame_id = "camera_init";
     path.poses.push_back(msg_body_pose);
     pubPath.publish(path);
+}
+
+void publish_frame(const ros::Publisher &pubLaserCloudFrame)
+{
+    uint size = pcl_wait_pub->points.size();
+    // PointCloudXYZ::Ptr laserCloudWorld(new PointCloudXYZ(size, 1));
+    // else
+    // {
+    //*pcl_wait_pub = *laserCloudWorld;
+    // }
+    // mtx_buffer_pointcloud.lock();
+    if (1) // if(publish_count >= PUBFRAME_PERIOD)
+    {
+        sensor_msgs::PointCloud2 laserCloudmsg;
+
+        pcl::toROSMsg(*pcl_wait_test, laserCloudmsg);
+
+        // laserCloudmsg.header.stamp = ros::Time().fromSec(last_timestamp_lidar); //.fromSec(last_timestamp_lidar);
+        laserCloudmsg.header.stamp = ros::Time::now(); //.fromSec(last_timestamp_lidar);
+        laserCloudmsg.header.frame_id = "camera_init";
+        pubLaserCloudFrame.publish(laserCloudmsg);
+        publish_count -= PUBFRAME_PERIOD;
+        // pcl_wait_pub->clear();
+    }
 }
 
 #ifdef USE_IKFOM
@@ -1201,6 +1226,8 @@ int main(int argc, char **argv)
     ros::Publisher pubLaserCloudMap = nh.advertise<sensor_msgs::PointCloud2>("/Laser_map", 100);
     ros::Publisher pubOdomAftMapped = nh.advertise<nav_msgs::Odometry>("/aft_mapped_to_init", 10);
     ros::Publisher pubPath = nh.advertise<nav_msgs::Path>("/path", 10);
+    /* add by crz*/
+    ros::Publisher pubLaserCloudFrame = nh.advertise<sensor_msgs::PointCloud2>("/cloud_registered_body", 100);
 
 #ifdef DEPLOY
     ros::Publisher mavros_pose_publisher = nh.advertise<geometry_msgs::PoseStamped>("/mavros/vision_pose/pose", 10);
@@ -1439,7 +1466,12 @@ int main(int argc, char **argv)
                 // lidar_selector->detect(LidarMeasures.measures.back().img, feats_down_world);
                 // p_imu->push_update_state(LidarMeasures.measures.back().img_offset_time, state);
                 geoQuat = tf::createQuaternionMsgFromRollPitchYaw(euler_cur(0), euler_cur(1), euler_cur(2));
-                publish_odometry(pubOdomAftMapped);
+                /**
+                 * @brief 关掉了视觉里程计
+                 *
+                 */
+                // publish_odometry(pubOdomAftMapped);
+
                 euler_cur = RotMtoEuler(state.rot_end);
                 fout_out << setw(20) << LidarMeasures.last_update_time - first_lidar_time << " " << euler_cur.transpose() * 57.3 << " " << state.pos_end.transpose() << " " << state.vel_end.transpose()
                          << " " << state.bias_g.transpose() << " " << state.bias_a.transpose() << " " << state.gravity.transpose() << " " << feats_undistort->points.size() << endl;
@@ -1738,7 +1770,14 @@ int main(int argc, char **argv)
                     auto &&Hsub_T = Hsub.transpose();
                     auto &&HTz = Hsub_T * meas_vec;
                     H_T_H.block<6, 6>(0, 0) = Hsub_T * Hsub;
-                    // EigenSolver<Matrix<double, 6, 6>> es(H_T_H.block<6,6>(0,0));
+                    /**
+                     * @brief 特征值分解，看一下过曝时H矩阵特征值是否有变化 0327
+                     *
+                     */
+                    EigenSolver<Matrix<double, 6, 6>> es(H_T_H.block<6, 6>(0, 0));
+                    auto V = es.eigenvalues().real();
+                    cout << "[Lidar EigenValue-->]" << V.transpose() << endl;
+
                     MD(DIM_STATE, DIM_STATE) &&K_1 =
                         (H_T_H + (state.cov / LASER_POINT_COV).inverse()).inverse();
                     G.block<DIM_STATE, 6>(0, 0) = K_1.block<DIM_STATE, 6>(0, 0) * H_T_H.block<6, 6>(0, 0);
@@ -1844,6 +1883,12 @@ int main(int argc, char **argv)
         }
         *pcl_wait_pub = *laserCloudWorld;
         *pcl_wait_test = *laserCloudFullRes;
+
+        /**
+         * @brief 发布imu系下点云
+         *
+         */
+        publish_frame(pubLaserCloudFrame);
 
         publish_frame_world(pubLaserCloudFullRes);
         // publish_visual_world_map(pubVisualCloud);
