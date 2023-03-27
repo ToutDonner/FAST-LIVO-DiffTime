@@ -58,6 +58,8 @@ namespace lidar_selection
     Matrix<double, DIM_STATE, DIM_STATE> G, H_T_H;
     MatrixXd H_sub, K;
     cv::flann::Index Kdtree;
+    /* add by crz */
+    int eigenValueThreshold;
 
     LidarSelector(const int grid_size, SparseMap *sparse_map);
 

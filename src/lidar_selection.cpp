@@ -899,13 +899,6 @@ namespace lidar_selection
 
                 auto &&H_sub_T = H_sub.transpose();
                 H_T_H.block<6, 6>(0, 0) = H_sub_T * H_sub;
-                /**
-                 * @brief 特征值分解，看一下过曝时H矩阵特征值是否有变化 0327
-                 *
-                 */
-                EigenSolver<Eigen::Matrix<double, 6, 6>> es(H_T_H.block<6, 6>(0, 0));
-                auto V = es.eigenvalues().real();
-                cout << "[Visual EigenValue-------->]" << V.transpose() << endl;
 
                 MD(DIM_STATE, DIM_STATE) &&K_1 = (H_T_H + (state->cov / img_point_cov).inverse()).inverse();
                 auto &&HTz = H_sub_T * z;
@@ -913,6 +906,23 @@ namespace lidar_selection
                 auto vec = (*state_propagat) - (*state);
                 G.block<DIM_STATE, 6>(0, 0) = K_1.block<DIM_STATE, 6>(0, 0) * H_T_H.block<6, 6>(0, 0);
                 auto solution = -K_1.block<DIM_STATE, 6>(0, 0) * HTz + vec - G.block<DIM_STATE, 6>(0, 0) * vec.block<6, 1>(0, 0);
+
+                /**
+                 * @brief 特征值分解，看一下过曝时H矩阵特征值是否有变化 0327
+                 *
+                 */
+                EigenSolver<Eigen::Matrix<double, 6, 6>> es(H_T_H.block<6, 6>(0, 0));
+                auto V = es.eigenvalues().real();
+                // cout << "[Visual EigenValue-------->]" << V.transpose() << endl;
+                cout << "[Rotation Min Eigen Value---->]" << V.block<3, 1>(0, 0).minCoeff() << endl;
+                cout << "[Position Min Eigen Value---->]" << V.block<3, 1>(3, 0).minCoeff() << endl;
+                if (V.block<3, 1>(3, 0).minCoeff() < eigenValueThreshold)
+                {
+                    ROS_WARN("Visual bad!!!!!!!");
+                    (*state) = old_state;
+                    EKF_end = true;
+                    break;
+                }
                 /**
                  * @brief debug 0327
                  *

@@ -97,7 +97,6 @@ condition_variable sig_buffer;
 
 string root_dir = ROOT_DIR;
 string map_file_path, lid_topic, imu_topic, img_topic, config_file;
-;
 M3D Eye3d(M3D::Identity());
 M3F Eye3f(M3F::Identity());
 V3D Zero3d(0, 0, 0);
@@ -141,7 +140,8 @@ double outlier_threshold, ncc_thre;
  * @brief add by crz
  *
  */
-bool onlyUpdateBias, useVio;
+bool onlyUpdateBias, useVio, onlyUpdateBg;
+int eigenValueThreshold;
 double img_time_offset;
 PointCloudXYZI::Ptr pcl_wait_test(new PointCloudXYZI());
 
@@ -1201,8 +1201,10 @@ void readParameters(ros::NodeHandle &nh)
      *
      */
     nh.param<bool>("onlyUpdateBias", onlyUpdateBias, false);
+    nh.param<bool>("onlyUpdateBg", onlyUpdateBg, false);
     nh.param<double>("img_time_offset", img_time_offset, 0.0);
     nh.param<bool>("useVio", useVio, true);
+    nh.param<int>("eigenValueThreshold", eigenValueThreshold, 0);
 }
 
 int main(int argc, char **argv)
@@ -1290,6 +1292,8 @@ int main(int argc, char **argv)
     lidar_selector->cx = cam_cx;
     lidar_selector->cy = cam_cy;
     lidar_selector->ncc_en = ncc_en;
+    /* add by crz */
+    lidar_selector->eigenValueThreshold = eigenValueThreshold;
     lidar_selector->init();
 
     p_imu->set_extrinsic(extT, extR);
@@ -1483,7 +1487,12 @@ int main(int argc, char **argv)
              */
             if (onlyUpdateBias)
             {
-                state_last_lidar.bias_a = state.bias_a;
+                if (!onlyUpdateBg)
+                {
+
+                    state_last_lidar.bias_a = state.bias_a;
+                }
+
                 state_last_lidar.bias_g = state.bias_g;
                 state = state_last_lidar;
                 /* debug */
@@ -1492,7 +1501,7 @@ int main(int argc, char **argv)
             }
             continue;
         }
-
+        ROS_WARN("11111111111111111");
 /*** Segment the map in lidar FOV ***/
 #ifndef USE_ikdforest
         lasermap_fov_segment();
