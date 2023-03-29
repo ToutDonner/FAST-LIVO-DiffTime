@@ -921,6 +921,7 @@ namespace lidar_selection
                     ROS_WARN("Visual bad!!!!!!!");
                     (*state) = old_state;
                     EKF_end = true;
+                    // visualGood = false;
                     break;
                 }
                 /**
@@ -1034,6 +1035,7 @@ namespace lidar_selection
             return;
         float error = 1e10;
         float now_error = error;
+        // visualGood = true;
 
         for (int level = 2; level >= 0; level--)
         {

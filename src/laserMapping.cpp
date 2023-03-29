@@ -1462,8 +1462,8 @@ int main(int argc, char **argv)
                 out_msg.image = img_rgb;
                 img_pub.publish(out_msg.toImageMsg());
 
-                publish_frame_world_rgb(pubLaserCloudFullResRgb, lidar_selector);
-                publish_visual_world_sub_map(pubSubVisualCloud);
+                // publish_frame_world_rgb(pubLaserCloudFullResRgb, lidar_selector);
+                // publish_visual_world_sub_map(pubSubVisualCloud);
 
                 // *map_cur_frame_point = *pcl_wait_pub;
                 // mtx_buffer_pointcloud.unlock();
@@ -1480,6 +1480,7 @@ int main(int argc, char **argv)
                 fout_out << setw(20) << LidarMeasures.last_update_time - first_lidar_time << " " << euler_cur.transpose() * 57.3 << " " << state.pos_end.transpose() << " " << state.vel_end.transpose()
                          << " " << state.bias_g.transpose() << " " << state.bias_a.transpose() << " " << state.gravity.transpose() << " " << feats_undistort->points.size() << endl;
             }
+
             /**
              * @brief 如果img和lidar时间不完全一致，VIO只更新Bias
              *        理论有待验证，反正能跑.....
@@ -1499,6 +1500,7 @@ int main(int argc, char **argv)
                 // cout << "[DEBUG]------------->VIO" << state.pos_end << endl;
                 // cout << "[DEBUG]------------->VIO" << state_last_lidar.pos_end << endl;
             }
+
             continue;
         }
 /*** Segment the map in lidar FOV ***/
