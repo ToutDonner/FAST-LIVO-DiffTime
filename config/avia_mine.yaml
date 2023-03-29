@@ -20,7 +20,7 @@ img_time_offset : 0.0456   #手动给图像时间戳一个延迟，测试用 0.0
 onlyUpdateBias : true #如果只利用视觉模块更新状态中的Bias，true
 onlyUpdateBg : false #如果只利用视觉模块更新状态中的Bias_g，true
 useVio : false   #如果使用视觉模块，true
-eigenValueThreshold : 800000 #450000
+eigenValueThreshold : -10000 #450000
 # crz add
 cam_fx: 795.581926146473
 cam_fy: 795.296012237473
