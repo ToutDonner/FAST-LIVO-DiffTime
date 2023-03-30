@@ -6,7 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /mapping1
-        - /mapping1/currPoints1
+        - /mapping1/surround1
         - /mapping1/currPoints1/Autocompute Value Bounds1
         - /Odometry1/Odometry1/Shape1
         - /Odometry1/Odometry2/Shape1
@@ -66,7 +66,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/Group
       Displays:
-        - Alpha: 0.3499999940395355
+        - Alpha: 0.5
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
             Max Value: 10
@@ -287,25 +287,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 30.42824363708496
+      Distance: 59.58549118041992
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.2352666854858398
-        Y: -2.804065227508545
-        Z: 1.1444091796875e-5
+        X: 4.1449480056762695
+        Y: 4.64156436920166
+        Z: 5.775659701612312e-6
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.48479732871055603
+      Pitch: 0.8997969627380371
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 3.2362871170043945
+      Yaw: 2.88128924369812
     Saved: ~
 Window Geometry:
   Displays:

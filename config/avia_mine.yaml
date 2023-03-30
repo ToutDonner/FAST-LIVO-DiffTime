@@ -7,7 +7,7 @@ filter_size_map : 0.3 #0.3
 cube_side_length : 20
 debug : 0
 grid_size : 40
-patch_size : 8 #8
+patch_size : 4 #8
 img_enable : 1
 lidar_enable : 1
 outlier_threshold : 150 # 78 100 156 150
@@ -16,7 +16,7 @@ ncc_thre: 0
 img_point_cov : 100 # 1000
 laser_point_cov : 0.001 # 0.001
 # crz add
-img_time_offset : 0.0944   #手动给图像时间戳一个延迟，测试用 0.0944是传输时间
+img_time_offset : 0.09542971  #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
 onlyUpdateBias : true #如果只利用视觉模块更新状态中的Bias，true
 onlyUpdateBg : false #如果只利用视觉模块更新状态中的Bias_g，true,no use!!!!
 useVio : true   #如果使用视觉模块，true
