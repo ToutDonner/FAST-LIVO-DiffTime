@@ -813,6 +813,66 @@ void publish_frame_world_rgb(const ros::Publisher &pubLaserCloudFullRes, lidar_s
     // mtx_buffer_pointcloud.unlock();
 }
 
+// PointCloudXYZI::Ptr pcl_wait_test(new PointCloudXYZI());
+PointCloudXYZI::Ptr pcl_wait_test_World(new PointCloudXYZI());
+/**
+ * @brief 发布转换后的点云，时间添加时间补偿时使用
+ *
+ * @param pubLaserCloudFullRes
+ * @param lidar_selector
+ */
+void publish_frame_wrold_rgb2(const ros::Publisher &pubLaserCloudFullRes, lidar_selection::LidarSelectorPtr lidar_selector)
+{
+    uint size = pcl_wait_test_World->points.size();
+    PointCloudXYZRGB::Ptr laserCloudWorldRGB(new PointCloudXYZRGB(size, 1));
+    if (img_en)
+    {
+        laserCloudWorldRGB->clear();
+        for (int i = 0; i < size; i++)
+        {
+            PointTypeRGB pointRGB;
+            pointRGB.x = pcl_wait_test_World->points[i].x;
+            pointRGB.y = pcl_wait_test_World->points[i].y;
+            pointRGB.z = pcl_wait_test_World->points[i].z;
+            V3D p_w(pcl_wait_test_World->points[i].x, pcl_wait_test_World->points[i].y, pcl_wait_test_World->points[i].z);
+            V2D pc(lidar_selector->new_frame_->w2c(p_w));
+            if (lidar_selector->new_frame_->cam_->isInFrame(pc.cast<int>(), 0))
+            {
+                // cv::Mat img_cur = lidar_selector->new_frame_->img();
+                cv::Mat img_rgb = lidar_selector->img_rgb;
+                V3F pixel = lidar_selector->getpixel(img_rgb, pc);
+                pointRGB.r = pixel[2];
+                pointRGB.g = pixel[1];
+                pointRGB.b = pixel[0];
+                laserCloudWorldRGB->push_back(pointRGB);
+            }
+        }
+    }
+    // else
+    // {
+    //*pcl_wait_pub = *laserCloudWorld;
+    // }
+    // mtx_buffer_pointcloud.lock();
+    if (1) // if(publish_count >= PUBFRAME_PERIOD)
+    {
+        sensor_msgs::PointCloud2 laserCloudmsg;
+        if (img_en)
+        {
+            // cout<<"RGB pointcloud size: "<<laserCloudWorldRGB->size()<<endl;
+            pcl::toROSMsg(*laserCloudWorldRGB, laserCloudmsg);
+        }
+        else
+        {
+            pcl::toROSMsg(*pcl_wait_test_World, laserCloudmsg);
+        }
+        laserCloudmsg.header.stamp = ros::Time::now(); //.fromSec(last_timestamp_lidar);
+        laserCloudmsg.header.frame_id = "camera_init";
+        pubLaserCloudFullRes.publish(laserCloudmsg);
+        publish_count -= PUBFRAME_PERIOD;
+        pcl_wait_test_World->clear();
+    }
+}
+
 void publish_frame_world(const ros::Publisher &pubLaserCloudFullRes)
 {
     // PointCloudXYZI::Ptr laserCloudFullRes(dense_map_en ? feats_undistort : feats_down_body);
@@ -995,6 +1055,11 @@ void publish_path(const ros::Publisher pubPath)
     pubPath.publish(path);
 }
 
+/**
+ * @brief 发布雷达坐标系下的点云
+ *
+ * @param pubLaserCloudFrame
+ */
 void publish_frame(const ros::Publisher &pubLaserCloudFrame)
 {
     uint size = pcl_wait_pub->points.size();
@@ -1424,7 +1489,8 @@ int main(int argc, char **argv)
                 //                         &laserCloudWorld->points[i]);
                 // }
                 int ptsize = pcl_wait_test->points.size();
-                PointCloudXYZI::Ptr pcl_wait_test_World(new PointCloudXYZI(ptsize, 1));
+                // pcl_wait_test_World(new PointCloudXYZI(ptsize, 1));
+                pcl_wait_test_World->resize(ptsize);
                 for (int i = 0; i < ptsize; i++)
                 {
                     pointBodyToWorld(&pcl_wait_test->points[i], &pcl_wait_test_World->points[i]);
@@ -1462,7 +1528,18 @@ int main(int argc, char **argv)
                 out_msg.image = img_rgb;
                 img_pub.publish(out_msg.toImageMsg());
 
-                // publish_frame_world_rgb(pubLaserCloudFullResRgb, lidar_selector);
+                /**
+                 * @brief 如果存在时间补偿，使用第二个赋色。
+                 *
+                 */
+                if (img_time_offset == 0)
+                {
+                    publish_frame_world_rgb(pubLaserCloudFullResRgb, lidar_selector);
+                }
+                else
+                {
+                    publish_frame_wrold_rgb2(pubLaserCloudFullResRgb, lidar_selector);
+                }
                 // publish_visual_world_sub_map(pubSubVisualCloud);
 
                 // *map_cur_frame_point = *pcl_wait_pub;
