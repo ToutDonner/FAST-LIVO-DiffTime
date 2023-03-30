@@ -916,14 +916,14 @@ namespace lidar_selection
                 // cout << "[Visual EigenValue-------->]" << V.transpose() << endl;
                 cout << "[Rotation Min Eigen Value---->]" << V.block<3, 1>(0, 0).minCoeff() << endl;
                 cout << "[Position Min Eigen Value---->]" << V.block<3, 1>(3, 0).minCoeff() << endl;
-                if (V.block<3, 1>(3, 0).minCoeff() < eigenValueThreshold)
-                {
-                    ROS_WARN("Visual bad!!!!!!!");
-                    (*state) = old_state;
-                    EKF_end = true;
-                    // visualGood = false;
-                    break;
-                }
+                // if (V.block<3, 1>(3, 0).minCoeff() < eigenValueThreshold)
+                // {
+                //     ROS_WARN("Visual bad!!!!!!!");
+                //     (*state) = old_state;
+                //     EKF_end = true;
+                //     // visualGood = false;
+                //     break;
+                // }
                 /**
                  * @brief debug 0327
                  *

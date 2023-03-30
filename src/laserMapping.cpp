@@ -1488,12 +1488,8 @@ int main(int argc, char **argv)
              */
             if (onlyUpdateBias)
             {
-                if (!onlyUpdateBg)
-                {
 
-                    state_last_lidar.bias_a = state.bias_a;
-                }
-
+                state_last_lidar.bias_a = state.bias_a;
                 state_last_lidar.bias_g = state.bias_g;
                 state = state_last_lidar;
                 /* debug */
