@@ -911,11 +911,11 @@ namespace lidar_selection
                  * @brief 特征值分解，看一下过曝时H矩阵特征值是否有变化 0327
                  *
                  */
-                EigenSolver<Eigen::Matrix<double, 6, 6>> es(H_T_H.block<6, 6>(0, 0));
-                auto V = es.eigenvalues().real();
-                // cout << "[Visual EigenValue-------->]" << V.transpose() << endl;
-                cout << "[Rotation Min Eigen Value---->]" << V.block<3, 1>(0, 0).minCoeff() << endl;
-                cout << "[Position Min Eigen Value---->]" << V.block<3, 1>(3, 0).minCoeff() << endl;
+                // EigenSolver<Eigen::Matrix<double, 6, 6>> es(H_T_H.block<6, 6>(0, 0));
+                // auto V = es.eigenvalues().real();
+                // // cout << "[Visual EigenValue-------->]" << V.transpose() << endl;
+                // cout << "[Rotation Min Eigen Value---->]" << V.block<3, 1>(0, 0).minCoeff() << endl;
+                // cout << "[Position Min Eigen Value---->]" << V.block<3, 1>(3, 0).minCoeff() << endl;
                 // if (V.block<3, 1>(3, 0).minCoeff() < eigenValueThreshold)
                 // {
                 //     ROS_WARN("Visual bad!!!!!!!");
