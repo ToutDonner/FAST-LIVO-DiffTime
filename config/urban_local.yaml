@@ -1,0 +1,75 @@
+feature_extract_enable : 0
+point_filter_num : 1
+max_iteration : 30
+dense_map_enable : 1
+filter_size_surf : 0.15 #0.15
+filter_size_map : 0.3 #0.3
+cube_side_length : 20
+debug : 0
+grid_size : 40
+patch_size : 8 #8
+img_enable : 1
+lidar_enable : 1
+outlier_threshold : 150 # 78 100 156 150
+ncc_en: false
+ncc_thre: 0.5
+img_point_cov : 1000 # 1000
+laser_point_cov : 0.001 # 0.001
+# crz add
+img_time_offset : 0.0   #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
+onlyUpdateBias : false #如果只利用视觉模块更新状态中的Bias，true
+useKalmanSmooth : true 
+useVio : true   #如果使用视觉模块，true
+eigenValueThreshold : 0 #450000 no use!!!!
+resolution : 0.5
+nearby_type : 26
+# crz add
+cam_fx: 1086.160899
+cam_fy: 1090.242963
+cam_cx: 940.067502
+cam_cy: 586.740077
+
+common:
+    lid_topic:  "/velodyne_points"
+    # imu_topic:  "/imu_raw"
+    imu_topic:  "/imu/data"
+
+preprocess:
+    lidar_type: 2 # Livox Avia LiDAR
+    scan_line: 32
+    blind: 5 # blind x m disable
+
+mapping:
+    acc_cov_scale: 100
+    gyr_cov_scale: 10000
+    fov_degree:    360
+    extrinsic_T: [ 0.0, 0.0, 0.0 ]
+    # extrinsic_T: [ 0.65, 0, 0 ]
+    extrinsic_R: [ 1, 0, 0,
+                   0, 1, 0,
+                   0, 0, 1]
+
+camera:
+    # img_topic: /usb_cam/image_raw
+    # img_topic:  /camera0/image_raw
+    # img_topic: /left_camera/image
+    # img_topic: /galaxy_camera/image_raw
+    img_topic: /camera/image_color
+    # img_topic: /camera_array/cam0/image_raw/compressed
+    #xiyuan
+    # Rcl: [9.9934608718980233e-01,-1.5715484428488590e-02,-3.2564114721728155e-02,
+    #  3.2359037356803094e-02, -1.3131917124154624e-02,9.9939003669937865e-01,
+    #  -1.6133527815482926e-02,-9.9979026615676858e-01,-1.2614792047622947e-02]
+    Rcl: [9.9885234402635936e-01,3.2359037356803094e-02,-1.6133527815482926e-02,
+        -1.5715484428488590e-02,-1.3131917124154624e-02,-9.9979026615676858e-01,
+        -3.2564114721728155e-02,9.9939003669937865e-01,-1.2614792047622947e-02]
+    Pcl: [-1.7434527332030676e-02, 1.7171139776467173e-01, -4.5251036141047592e-02]
+    # Rcl: [ -0.00800608, -8.30487e-05,     0.999968,
+    #        -0.999963,   0.00337199,  -0.00800575,
+    #        -0.00337122,   -0.999995, -0.000110041]
+    # Pcl: [0.0815759, 0.022576, 0.0551316]
+    # [9.9885234402635936e-01,1.3591158885981787e-03,4.7876378696062108e-02,
+    #  -4.7864188349269129e-02, -7.9091258538426246e-03,9.9882253939420773e-01,
+    #  1.7361758877140372e-03,-9.9996779874765440e-01,-7.8349959194297103e-03]
+
+    

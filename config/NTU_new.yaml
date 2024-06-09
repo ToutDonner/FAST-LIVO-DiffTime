@@ -1,0 +1,65 @@
+feature_extract_enable : 0
+point_filter_num : 4
+max_iteration : 10
+dense_map_enable : 1
+filter_size_surf : 0.5 # 0.3
+filter_size_map : 0.5 # 0.4
+cube_side_length : 20 
+debug : 0
+grid_size : 40
+patch_size : 8
+img_enable : 1
+lidar_enable : 1
+outlier_threshold : 50
+ncc_en: true
+ncc_thre: 0.5
+img_point_cov : 1000
+laser_point_cov : 0.001
+# crz add
+img_time_offset : 0.00  #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
+onlyUpdateBias : false #如果只利用视觉模块更新状态中的Bias，true
+useKalmanSmooth : true 
+useVio : true   #如果使用视觉模块，true
+eigenValueThreshold : -10000 #450000 no use!!!!
+resolution : 0.5
+nearby_type : 26
+# crz add
+cam_fx: 385.1445237981549
+cam_fy: 385.01248963266613
+cam_cx: 324.7310285651963
+cam_cy: 238.66995044470548
+zero_point_one: true
+
+
+common:
+    lid_topic:  "/os_cloud_node/points"
+    imu_topic:  "/os_cloud_node/imu"
+    # imu_topic:  "/vn200/imu"
+
+preprocess:
+    lidar_type: 3  # Ouster
+    scan_line: 129
+    blind: 4 # blind x m disable
+
+mapping:
+    acc_cov_scale: 10 #10
+    gyr_cov_scale: 10 #10
+    fov_degree:    180
+    # extrinsic_T: [ -0.04894521120494695,
+    #                -0.03126929060348084,
+    #                -0.01755515794222565 ]
+    # extrinsic_R: [ 0.9999135040741837,      -0.011166365511073898,  -0.006949579221822984,
+    #                -0.011356389542502144,   -0.9995453006865824,     -0.02793249526856565,
+    #               -0.006634514801117132,   0.02800900135032654,   -0.999585653686922  ]
+    extrinsic_T: [ -0.0,
+                   -0.0,
+                   -0.0 ]
+    extrinsic_R: [ 1,0,0,0,1,0,0,0,1]
+
+camera:
+    img_topic: /d455t/color/image_raw
+    # NTU_VIRAL
+    Rcl: [-0.0005063667779342879, 0.9999682435112625, -0.00201407,
+         0.004390860953902336, 0.007955484179591332, 0.9999587144535296,
+          0.999990231918679, 0.0004714238775566064, -0.0043947499084668095]
+    Pcl: [-0.0682063644957161,  -0.004985284223667225, -0.09386005406130697]

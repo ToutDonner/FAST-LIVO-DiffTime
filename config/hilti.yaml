@@ -19,8 +19,8 @@ laser_point_cov : 0.001 # 0.001
 img_time_offset : 0   #手动给图像时间戳一个延迟，测试用 0.0356是传输时间 剩下的是曝光时间
 onlyUpdateBias : false #如果只利用视觉模块更新状态中的Bias，true
 onlyUpdateBg : false #如果只利用视觉模块更新状态中的Bias_g，true
-useKalmanSmooth : true 
-useVio : true   #如果使用视觉模块，true
+useKalmanSmooth : false 
+useVio : false   #如果使用视觉模块，true
 eigenValueThreshold : 0 #450000
 resolution : 0.3
 nearby_type : 26
@@ -30,22 +30,22 @@ cam_cx: 318.908851
 cam_cy: 234.238189
 
 common:
-    lid_topic:  "/livox/lidar"
-    imu_topic:  "/livox/imu"
+    lid_topic:  "/hesai/pandar"
+    imu_topic:  "/alphasense/imu"
 
 preprocess:
-    lidar_type: 1 # Livox Avia LiDAR
-    scan_line: 6
+    lidar_type: 2 # Livox Avia LiDAR
+    scan_line: 32
     blind: 5 # blind x m disable
 
 mapping:
     acc_cov_scale: 100
     gyr_cov_scale: 10000
     fov_degree:    90
-    extrinsic_T: [ 0.04165, 0.02326, -0.0284 ]
-    extrinsic_R: [ 1, 0, 0,
-                   0, 1, 0,
-                   0, 0, 1]
+    extrinsic_T: [ -0.006730146149038548, -0.006897049862999071, 0.049898628062256645 ]
+    extrinsic_R: [ 0.006609639848469365, -0.9999773650294649, 0.0012578115132016717,
+                   -0.9999762249571927, -0.006612093869054189, -0.0019569708811106104,
+                   0.001965243352927244, -0.0012448467359610184, -0.9999972940839232]
 
 camera:
     # img_topic: /usb_cam/image_raw
