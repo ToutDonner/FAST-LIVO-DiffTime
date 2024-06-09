@@ -1418,15 +1418,15 @@ int main(int argc, char **argv) {
               G_lc * (state.cov - state_propagat.cov) * G_lc.transpose();
 
           // save data
-          frame_num += 1;
-          string img_name = std::to_string(frame_num) + ".png";
-          cv::imwrite(root_dir + "/image/" + img_name, img_copy);
-          Eigen::Quaterniond rot_(state.rot_end);
+          // frame_num += 1;
+          // string img_name = std::to_string(frame_num) + ".png";
+          // cv::imwrite(root_dir + "/image/" + img_name, img_copy);
+          // Eigen::Quaterniond rot_(state.rot_end);
 
-          fout_pose << frame_num << " " << rot_.w() << " " << rot_.x() << " "
-                    << rot_.y() << " " << rot_.z() << " "
-                    << state.pos_end.transpose() << " " << int(1) << " "
-                    << img_name << " " << endl;
+          // fout_pose << frame_num << " " << rot_.w() << " " << rot_.x() << " "
+          //           << rot_.y() << " " << rot_.z() << " "
+          //           << state.pos_end.transpose() << " " << int(1) << " "
+          //           << img_name << " " << endl;
           /**
            * @brief 关掉了视觉里程计
            *
