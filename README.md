@@ -1,3 +1,5 @@
+[<img src="https://api.gitsponsors.com/api/badge/img?id=618243759" height="50">](https://api.gitsponsors.com/api/badge/link?p=FhEQLIYJlaUOBU1SUbqWrg1UVwjkS9IuhsuRqJgCiq5xXL9AS2BKaoq0zZlPNzB0)
+
 # Modified
 
 * 在iESKF的基础上加了一步RTSS，用于统一系统状态，雷达和相机无需执行硬同步。软/硬同步均可使用
