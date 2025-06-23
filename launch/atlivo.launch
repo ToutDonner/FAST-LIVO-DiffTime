@@ -18,8 +18,8 @@
 	</group>
 	<!-- ROS在图像传输时，为了节省带宽，先将图像压缩后再做传输，如图像话题/realsense/color/image_raw/compressed就是压缩后的图像，图像被接收后还需要解压才能使用 -->
 	<!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=/left_camera/image raw out:=/left_camera/image" output="screen" respawn="true"/> -->
-	<node pkg="image_transport" type="republish" name="republish" args="compressed in:=/galaxy_camera/image_raw raw out:=/galaxy_camera/image_raw" output="screen" respawn="true"/>
-
+	<!-- <node pkg="image_transport" type="republish" name="republish" args="compressed in:=/camera_0/image_raw raw out:=/camera_0/image_raw" output="screen" respawn="true"/> -->
+	<node pkg="image_transport" type="republish" name="republish" args="compressed in:=/left_camera/image raw out:=/left_camera/image" output="screen" respawn="true"/>
 launch-prefix="gdb -ex run --args" launch-prefix="valgrind --leak-check=full --show-leak-kinds=all"
 
 </launch> 	

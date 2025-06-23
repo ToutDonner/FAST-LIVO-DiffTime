@@ -15,11 +15,19 @@ ncc_en: false
 ncc_thre: 0.5
 img_point_cov : 1000 # 1000
 laser_point_cov : 0.001 # 0.001
+
 # crz add
-img_time_offset : 0.072   #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
-# img_time_offset : 0.095    #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
+img_time_offset : 0.072  #手动给图像时间戳一个延迟，测试用 0.09442971(s) 是传输时间，0.001是曝光时间(20000us = 20ms = 0.02s ) 海康相机 0.5 传输时间
+# img_time_offset : 0.005  
+# img_time_offset : 0.10 
+
+# img_time_offset : 0.05
+# img_time_offset : 0.03
+# img_time_offset : 0.09
+
+
 onlyUpdateBias : false #如果只利用视觉模块更新状态中的Bias，true
-useKalmanSmooth : true 
+useKalmanSmooth : true
 useVio : true   #如果使用视觉模块，true
 eigenValueThreshold : 0 #450000 no use!!!!
 resolution : 0.05
@@ -30,11 +38,23 @@ cam_fx: 758.2887
 cam_fy: 756.9715
 cam_cx: 642.9316
 cam_cy: 510.1502
+
 # 0401
 # cam_fx: 1057.1895
 # cam_fy: 1053.1645
 # cam_cx: 725.8144
 # cam_cy: 554.5573
+
+# cam_fx: 1200.37253
+# cam_fy: 1202.87773
+# cam_cx: 737.948647
+# cam_cy: 561.23957
+
+# cam_fx: 453.483063
+# cam_fy: 453.254913
+# cam_cx: 318.908851
+# cam_cy: 234.238189
+
 
 time_predict_val: 0.01
 time_predict_cov: 0.01
@@ -76,5 +96,17 @@ camera:
     #       0.999964,0.000501258,-0.00841962]
     # Pcl: [0.0585253, 0.0401374, -0.0649813]
 
-
+    # img_topic: /camera_0/image_raw
+    #
+    # Rcl: [-0.000482285,-0.999948,0.0101929,
+    #       -0.0742456,-0.010129,-0.997189,
+    #       0.99724,-0.00123771,-0.0742369 ]
+    # Pcl: [-0.119728, -0.0122667, -0.0165336]
+    
+    # img_topic: /left_camera/image
+    #xiyuan
+    # Rcl: [0.00162756,-0.999991,0.00390957,
+    #      -0.0126748,-0.00392989,-0.999912,
+    #       0.999918,0.00157786,-0.012681]
+    # Pcl: [0.0409257, 0.0318424, -0.0927219]
     

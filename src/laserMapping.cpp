@@ -150,7 +150,6 @@ int dense_map_en = 1;
 int img_en = 1;
 int lidar_en = 1;
 int debug = 0;
-int frame_num = 0;
 bool fast_lio_is_ready = false;
 int grid_size, patch_size;
 double outlier_threshold, ncc_thre;
@@ -932,6 +931,7 @@ void set_posestamp(T &out) {
 void publish_odometry(const ros::Publisher &pubOdomAftMapped) {
   odomAftMapped.header.frame_id = "camera_init";
   odomAftMapped.child_frame_id = "aft_mapped";
+  // odomAftMapped.header.stamp = ros::Time().now();
   odomAftMapped.header.stamp = ros::Time().fromSec(last_timestamp_lidar);
   // //.ros::Time()fromSec(last_timestamp_lidar);
   // odomAftMapped.header.stamp =
@@ -1019,7 +1019,7 @@ void readParameters(ros::NodeHandle &nh) {
   nh.param<double>("cam_cy", cam_cy, 234.238189);
   nh.param<double>("laser_point_cov", LASER_POINT_COV, 0.001);
   nh.param<double>("img_point_cov", IMG_POINT_COV, 10);
-  nh.param<string>("map_file_path", map_file_path, "");
+  nh.param<string>("map_file_path", map_file_path, "/home/djq");
   nh.param<string>("common/lid_topic", lid_topic, "/livox/lidar");
   nh.param<string>("common/imu_topic", imu_topic, "/livox/imu");
   nh.param<string>("camera/img_topic", img_topic, "/usb_cam/image_raw");
@@ -1153,6 +1153,7 @@ int main(int argc, char **argv) {
   lidar_selector->fy = cam_fy;
   lidar_selector->cx = cam_cx;
   lidar_selector->cy = cam_cy;
+  std::cout<<"cam_fx: "<<cam_fx <<" cam_fy: "<<cam_fy<<" cam_cx: "<< cam_cx << " cam_cy: "<< cam_cy << endl;
   lidar_selector->ncc_en = ncc_en;
   /* add by crz */
   lidar_selector->eigenValueThreshold = eigenValueThreshold;
@@ -1196,11 +1197,10 @@ int main(int argc, char **argv) {
   string pos_log_dir = root_dir + "/Log/pos_log.txt";
   fp = fopen(pos_log_dir.c_str(), "w");
 
-  ofstream fout_pre, fout_out, fout_dbg, fout_pose;
+  ofstream fout_pre, fout_out, fout_dbg;
   fout_pre.open(DEBUG_FILE_DIR("mat_pre.txt"), ios::out);
   fout_out.open(DEBUG_FILE_DIR("mat_out.txt"), ios::out);
   fout_dbg.open(DEBUG_FILE_DIR("dbg.txt"), ios::out);
-  fout_pose.open(root_dir + "/image/pose.txt", ios::out);
   // if (fout_pre && fout_out)
   //     cout << "~~~~"<<ROOT_DIR<<" file opened" << endl;
   // else
@@ -1301,8 +1301,6 @@ int main(int argc, char **argv) {
                            &pcl_wait_test_World->points[i]);
         }
 
-        cv::Mat img_copy = LidarMeasures.measures.back().img.clone();
-
         lidar_selector->detect(LidarMeasures.measures.back().img,
                                pcl_wait_test_World);
         // int size = lidar_selector->map_cur_frame_.size();
@@ -1339,11 +1337,11 @@ int main(int argc, char **argv) {
          * @brief 如果存在时间补偿，使用第二个赋色。
          *
          */
-        publish_frame_world_rgb(pubLaserCloudFullResRgb, lidar_selector);
-        // if (img_time_offset == 0) {
-        // } else {
-        //   publish_frame_wrold_rgb2(pubLaserCloudFullResRgb, lidar_selector);
-        // }
+        if (img_time_offset == 0) {
+          publish_frame_world_rgb(pubLaserCloudFullResRgb, lidar_selector);
+        } else {
+          publish_frame_wrold_rgb2(pubLaserCloudFullResRgb, lidar_selector);
+        }
         // publish_visual_world_sub_map(pubSubVisualCloud);
 
         // *map_cur_frame_point = *pcl_wait_pub;
@@ -1416,17 +1414,6 @@ int main(int argc, char **argv) {
           state_last_lidar.cov =
               state_last_lidar.cov +
               G_lc * (state.cov - state_propagat.cov) * G_lc.transpose();
-
-          // save data
-          // frame_num += 1;
-          // string img_name = std::to_string(frame_num) + ".png";
-          // cv::imwrite(root_dir + "/image/" + img_name, img_copy);
-          // Eigen::Quaterniond rot_(state.rot_end);
-
-          // fout_pose << frame_num << " " << rot_.w() << " " << rot_.x() << " "
-          //           << rot_.y() << " " << rot_.z() << " "
-          //           << state.pos_end.transpose() << " " << int(1) << " "
-          //           << img_name << " " << endl;
           /**
            * @brief 关掉了视觉里程计
            *
@@ -1798,21 +1785,21 @@ int main(int argc, char **argv) {
     publish_path(pubPath);
   }
   //--------------------------save map---------------
-  // string surf_filename(map_file_path + "/surf.pcd");
-  // string corner_filename(map_file_path + "/corner.pcd");
-  // string all_points_filename(map_file_path + "/all_points.pcd");
+  string surf_filename(map_file_path + "/surf.pcd");
+  string corner_filename(map_file_path + "/corner.pcd");
+  string all_points_filename(map_file_path + "/all_points.pcd");
 
-  // PointCloudXYZI surf_points, corner_points;
-  // surf_points = *featsFromMap;
-  // fout_out.close();
-  // fout_pre.close();
-  // if (surf_points.size() > 0 && corner_points.size() > 0)
-  // {
-  // pcl::PCDWriter pcd_writer;
-  // cout << "saving...";
-  // pcd_writer.writeBinary(surf_filename, surf_points);
-  // pcd_writer.writeBinary(corner_filename, corner_points);
-  // }
+  PointCloudXYZI surf_points, corner_points;
+  surf_points = *featsFromMap;
+  fout_out.close();
+  fout_pre.close();
+  if (surf_points.size() > 0 && corner_points.size() > 0)
+  {
+  pcl::PCDWriter pcd_writer;
+  cout << "saving...";
+  pcd_writer.writeBinary(surf_filename, surf_points);
+  pcd_writer.writeBinary(corner_filename, corner_points);
+  }
 #ifndef DEPLOY
   vector<double> t, s_vec, s_vec2, s_vec3, s_vec4, s_vec5, s_vec6, s_vec7;
   FILE *fp2;

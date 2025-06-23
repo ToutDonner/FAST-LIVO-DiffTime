@@ -60,7 +60,7 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
 )
-
+# set(OpenCV_DIR /home/crz/Convirment/opencv-3.4.16/build)
 find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED)
 FIND_PACKAGE(OpenCV REQUIRED)
@@ -94,6 +94,11 @@ catkin_package(
   CATKIN_DEPENDS geometry_msgs nav_msgs roscpp rospy std_msgs message_runtime cv_bridge image_transport vikit_common vikit_ros
   DEPENDS EIGEN3 PCL OpenCV Sophus
   INCLUDE_DIRS include
+)
+catkin_install_python(PROGRAMS
+src/run_nty.py
+DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+
 )
 
 # add_executable(loam_feat_extract src/feature_extract.cpp)

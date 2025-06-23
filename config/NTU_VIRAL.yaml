@@ -16,7 +16,7 @@ ncc_thre: 0.5
 img_point_cov : 1000
 laser_point_cov : 0.001
 # crz add
-img_time_offset : 0.00  #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
+img_time_offset : 0.06  #手动给图像时间戳一个延迟，测试用 0.09442971是传输时间，0.001是曝光时间
 onlyUpdateBias : false #如果只利用视觉模块更新状态中的Bias，true
 useKalmanSmooth : true 
 useVio : true   #如果使用视觉模块，true
